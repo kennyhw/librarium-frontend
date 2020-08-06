@@ -3,6 +3,7 @@ import React from 'react';
 import NavBar from './NavBar';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
+import Main from './Main';
 
 class Core extends React.Component {
     constructor(props) {
@@ -116,7 +117,7 @@ class Core extends React.Component {
                 break;
             case 'home':
                 displayedContent = <React.Fragment>
-                                    <h3>Hello {this.state.username}!</h3>
+                                    <Main username={this.state.username}/>
                                 </React.Fragment>;
                 break;
             default:
