@@ -8,7 +8,7 @@ class Core extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayedForm: '',
+            content: '',
             loggedIn: localStorage.getItem('token') ? true : false,
             username: ''
         };
@@ -41,9 +41,11 @@ class Core extends React.Component {
         .then(jsonData => {
             localStorage.setItem('token', jsonData.token);
             this.setState({
-                loggedIn: true,
-                displayedForm: '',
-                username: jsonData.user.username
+                loggedIn: jsonData.user ? true : false,
+            });
+            this.setState({
+                content: this.state.loggedIn ? 'home' : 'login-error-noAccount',
+                username: this.state.loggedIn ? jsonData.user.username : ''
             });
         });
     };
@@ -61,9 +63,11 @@ class Core extends React.Component {
         .then(jsonData => {
             localStorage.setItem('token', jsonData.token);
             this.setState({
-                loggedIn: true,
-                displayedForm: '',
-                username: jsonData.username
+                loggedIn: jsonData.username[0] === 'A user with that username already exists.' ? false : true
+            });
+            this.setState({
+                content: this.state.loggedIn ? 'home' : 'signup-error-duplicateAccount',
+                username: ''
             });
         });
     };
@@ -76,34 +80,55 @@ class Core extends React.Component {
         });
     }
 
-    displayForm = form => {
+    displayContent = newContent => {
         this.setState({
-            displayedForm: form
+            content: newContent
         });
     };
 
     render() {
-        let form;
-        switch (this.state.displayedForm) {
+        let displayedContent;
+        switch (this.state.content) {
             case 'login':
-                form = <LoginForm handleLogin={this.handleLogin} />;
+                displayedContent = <React.Fragment>
+                                    <LoginForm handleLogin={this.handleLogin} />
+                                </React.Fragment>;
+                break;
+            case 'login-error-noAccount':
+                displayedContent = <React.Fragment>
+                                    <LoginForm message={'This account does not exist!'} handleLogin={this.handleLogin} />
+                                </React.Fragment>;
                 break;
             case 'signup':
-                form = <SignupForm handleSignup={this.handleSignup} />;
+                displayedContent = <React.Fragment>
+                                    <SignupForm handleSignup={this.handleSignup} />
+                                </React.Fragment>;
+                break;
+            case 'signup-error-duplicateAccount':
+                displayedContent = <React.Fragment>
+                                    <SignupForm message={'An account with that username already exists!'} handleSignup={this.handleSignup} />
+                                </React.Fragment>;
+                break;
+            case 'home':
+                displayedContent = <React.Fragment>
+                                    <h3>Hello {this.state.username}!</h3>
+                                </React.Fragment>;
                 break;
             default:
-                form = null;
+                displayedContent = <React.Fragment>
+                                    <h3>Welcome!<br></br>
+                                    Please log in or sign up.</h3>
+                                </React.Fragment>;
         }
 
         return(
             <div>
                 <NavBar
                     loggedIn={this.state.loggedIn}
-                    displayForm={this.displayForm}
+                    displayContent={this.displayContent}
                     handleLogout={this.handleLogout}
                 />
-                {form}
-                {this.state.loggedIn ? `Hello, ${this.state.username}` : 'Please log in'}
+                {displayedContent}
             </div>
         )
     }

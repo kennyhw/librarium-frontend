@@ -21,6 +21,7 @@ class SignupForm extends React.Component {
         return (
             <form onSubmit={e => this.props.handleSignup(e, this.state)}>
                 <h3>Sign Up</h3>
+                <h6>{this.props.message}</h6>
                 <label htmlFor="username">Username</label>
                 <input
                     type="text"
@@ -44,5 +45,6 @@ class SignupForm extends React.Component {
 export default SignupForm;
 
 SignupForm.propTypes = {
+    message: PropTypes.string,
     handleSignup: PropTypes.func.isRequired
 };

@@ -21,6 +21,7 @@ class LoginForm extends React.Component {
         return (
             <form onSubmit={e => this.props.handleLogin(e, this.state)}>
                 <h3>Log In</h3>
+                <h6>{this.props.message}</h6>
                 <label htmlFor="username">Username</label>
                 <input
                     type="text"
@@ -44,5 +45,6 @@ class LoginForm extends React.Component {
 export default LoginForm;
 
 LoginForm.propTypes = {
+    message: PropTypes.string,
     handleLogin: PropTypes.func.isRequired
 }
