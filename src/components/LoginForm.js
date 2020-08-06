@@ -21,7 +21,7 @@ class LoginForm extends React.Component {
         return (
             <form onSubmit={e => this.props.handleLogin(e, this.state)}>
                 <h3>Log In</h3>
-                <h6>{this.props.message}</h6>
+                {this.props.message ? <h5>{this.props.message}</h5> : <span></span>}
                 <label htmlFor="username">Username</label>
                 <input
                     type="text"
@@ -36,6 +36,7 @@ class LoginForm extends React.Component {
                     value={this.state.password}
                     onChange={this.handleChange}
                 />
+                <br></br>
                 <input type="submit" />
             </form>
         );

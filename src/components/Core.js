@@ -25,6 +25,10 @@ class Core extends React.Component {
             .then(jsonData => {
                 this.setState({ username: jsonData.username });
             });
+        } else {
+            this.setState({
+                content: ''
+            })
         }
     }
 
@@ -67,7 +71,7 @@ class Core extends React.Component {
             });
             this.setState({
                 content: this.state.loggedIn ? 'home' : 'signup-error-duplicateAccount',
-                username: ''
+                username: this.state.loggedIn ? jsonData.username : ''
             });
         });
     };
@@ -76,6 +80,7 @@ class Core extends React.Component {
         localStorage.removeItem('token');
         this.setState({
             loggedIn: false,
+            content: '',
             username: ''
         });
     }
